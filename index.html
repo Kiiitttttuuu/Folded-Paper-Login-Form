@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Login</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap");
+
+      :root {
+        --space-root: 1rem;
+        --space-xs: calc(var(--space-root) / 2);
+        --space-s: calc(var(--space-root) / 1.5);
+        --space-m: var(--space-root);
+        --space-l: calc(var(--space-root) * 1.5);
+        --space-xl: calc(var(--space-root) * 2);
+        --color-primary: mediumslateblue;
+        --color-secondary: black;
+        --color-tertiary: hotpink;
+        --base-border-radius: 0.25rem;
+        --ease: cubic-bezier(0.075, 0.82, 0.165, 1);
+        --duration: 350ms;
+        --font-family: "Roboto", sans-serif;
+        --font-size: 1.25rem;
+      }
+
+      @mixin label-styles {
+        font-size: calc(var(--font-size) / 1.65);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.065rem;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        display: grid;
+        place-items: center;
+        margin: 0;
+        height: 100vh;
+        padding: var(--space-m);
+        font-size: var(--font-size);
+        font-family: var(--font-family);
+        line-height: 1.2;
+        background-color: var(--color-tertiary);
+      }
+
+      a {
+        color: var(--color-primary);
+
+        &:focus {
+          color: var(--color-secondary);
+        }
+      }
+
+      h2 {
+        font-weight: 700;
+        font-size: calc(var(--font-size) * 1.5);
+      }
+
+      .form {
+        position: relative;
+        width: 100%;
+        max-width: 450px;
+        margin: 0 auto;
+        transform: skewY(-5deg) translateY(10%) scale(0.94);
+        transition: box-shadow var(--duration) var(--ease),
+          transform var(--duration) var(--ease);
+
+        &:before,
+        &:after {
+          content: "";
+          position: absolute;
+          pointer-events: none;
+          background-color: darken(white, 8%);
+          width: 25%;
+          height: 100%;
+          transition: background-color var(--duration) var(--ease),
+            transform var(--duration) var(--ease);
+        }
+
+        &:before {
+          top: 0;
+          right: calc(100% - 1px);
+          transform-origin: 100% 100%;
+          transform: skewY(-35deg) scaleX(-1);
+          z-index: -1;
+        }
+
+        &:after {
+          top: 0;
+          left: calc(100% - 1px);
+          transform-origin: 0 0;
+          transform: skewY(-35deg) scaleX(-1);
+          z-index: 2;
+        }
+
+        &:hover,
+        &:focus-within {
+          transform: scale(1.0001);
+          box-shadow: 0 1rem 3rem rgba(black, 0.1);
+
+          &:before,
+          &:after {
+            background-color: white;
+            transform: skewY(0);
+          }
+        }
+      }
+
+      .form-inner {
+        padding: var(--space-xl);
+        background-color: white;
+        z-index: 1;
+
+        > * + * {
+          margin-top: var(--space-xl);
+        }
+      }
+
+      .input-wrapper {
+        &:focus-within {
+          label {
+            color: var(--color-secondary);
+          }
+
+          .icon {
+            background-color: var(--color-secondary);
+          }
+
+          input {
+            border-color: var(--color-secondary);
+          }
+        }
+
+        + .input-wrapper {
+          margin-top: var(--space-l);
+        }
+      }
+
+      .input-group {
+        position: relative;
+
+        input {
+          border-radius: var(--base-border-radius);
+          padding-left: calc(var(--space-s) + 60px);
+        }
+
+        .icon {
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 100%;
+          border-top-left-radius: var(--base-border-radius);
+          border-bottom-left-radius: var(--base-border-radius);
+          pointer-events: none;
+        }
+      }
+
+      label {
+        @include label-styles;
+        display: block;
+        margin-bottom: var(--space-xs);
+        color: var(--color-primary);
+      }
+
+      .icon {
+        display: flex;
+        align-items: center;
+        flex: 0 1 auto;
+        padding: var(--space-m);
+        background-color: var(--color-primary);
+
+        svg {
+          width: 1.25em;
+          height: 1.25em;
+          fill: white;
+          pointer-events: none;
+          user-select: none;
+          transition: transform var(--duration) var(--ease);
+        }
+      }
+
+      input {
+        flex: 1 1 0;
+        width: 100%;
+        outline: none;
+        padding: var(--space-m);
+        font-size: var(--font-size);
+        font-family: var(--font-family);
+        color: var(--color-secondary);
+        border: 2px solid var(--color-primary);
+
+        &:focus {
+          color: var(--color-primary);
+        }
+      }
+
+      .btn-group {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        > * + * {
+          margin-left: var(--space-s);
+        }
+      }
+
+      .btn {
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        outline: none;
+        padding: var(--space-m) var(--space-l);
+        cursor: pointer;
+        border: 2px solid transparent;
+        border-radius: var(--base-border-radius);
+      }
+
+      .btn--primary {
+        @include label-styles;
+        background-color: var(--color-primary);
+        border-color: var(--color-primary);
+        color: white;
+
+        &:focus {
+          background-color: var(--color-secondary);
+          border-color: var(--color-secondary);
+        }
+      }
+
+      .btn--text {
+        font-size: calc(var(--font-size) / 1.5);
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <form class="form" id="login-form" onsubmit="handleSubmit(event)" autocomplete="off">
+      <div class="form-inner">
+        <h2>User Login</h2>
+
+        <div class="input-wrapper">
+          <label for="login-username">Username</label>
+          <div class="input-group">
+            <span class="icon">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"
+                />
+              </svg>
+            </span>
+            <input type="text" id="login-username" data-lpignore="true" />
+          </div>
+        </div>
+
+        <div class="input-wrapper">
+          <label for="login-password">Password</label>
+          <div class="input-group">
+            <span class="icon">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M11.83,1.73C8.43,1.79 6.23,3.32 6.23,3.32C5.95,3.5 5.88,3.91 6.07,4.19C6.27,4.5 6.66,4.55 6.96,4.34C6.96,4.34 11.27,1.15 17.46,4.38C17.75,4.55 18.14,4.45 18.31,4.15C18.5,3.85 18.37,3.47 18.03,3.28C16.36,2.4 14.78,1.96 13.36,1.8C12.83,1.74 12.32,1.72 11.83,1.73M12.22,4.34L17.46,6.54L12,10.35L6.55,6.52L12.22,4.34M19.62,12.72C18.51,12.86 17.41,13.53 16.61,14.45C15.81,15.37 15.53,16.53 15.81,17.55C16.09,18.58 16.88,19.47 17.85,19.78C18.82,20.09 19.88,19.78 20.51,19.07C21.14,18.36 21.35,17.1 21.07,16.08C20.79,15.06 20.01,14.17 19.04,13.87C18.08,13.57 17.02,13.87 16.39,14.58C15.76,15.29 15.55,16.55 15.79,17.57C16.02,18.59 16.88,19.34 17.85,19.34C18.82,19.34 19.58,18.59 19.62,17.63C19.66,16.67 18.72,15.66 17.85,15.48C16.97,15.29 16.12,15.88 15.59,16.72C15.05,17.57 15.04,18.62 15.42,19.46C15.81,20.3 16.62,21.04 17.56,21.04C18.51,21.04 19.43,20.28 19.62,19.39C19.82,18.51 19.1,17.61 18.16,17.61C17.21,17.61 16.36,18.11 15.93,18.85C15.49,19.59 15.49,20.6 16.08,21.32C16.66,22.04 17.55,22.24 18.35,21.87C19.15,21.5 19.74,20.57 19.62,19.39C19.5,18.21 18.54,17.35 17.5,17.35C16.48,17.35 15.57,18.21 15.75,19.39C15.94,20.57 16.61,21.56 17.5,21.56C18.48,21.56 19.36,20.5 19.62,19.39M17.66,19.43C17.28,19.61 16.87,19.5 16.53,19.12C16.19,18.74 16.3,18.21 16.69,18.05C17.09,17.9 17.54,18.13 17.85,18.48C18.17,18.84 18.16,19.43 17.66,19.43"
+                />
+              </svg>
+            </span>
+            <input type="password" id="login-password" data-lpignore="true" />
+          </div>
+        </div>
+
+        <div class="btn-group">
+          <button class="btn btn--primary" type="submit">Login</button>
+          <a href="#" class="btn btn--text">Forgot password?</a>
+        </div>
+      </div>
+    </form>
+
+    <script>
+      function handleSubmit(event) {
+        event.preventDefault();
+
+        // Get username and password
+        const username = document.getElementById('login-username').value;
+        const password = document.getElementById('login-password').value;
+
+        // Save to local storage
+        localStorage.setItem('username', username);
+        localStorage.setItem('password', password);
+
+        // Optionally, you might want to display a message or redirect the user
+        alert('Credentials saved!');
+
+        // You can also redirect or submit the form data if needed
+        // window.location.href = 'some-other-page.html'; // example redirect
+      }
+    </script>
+  </body>
+</html>
